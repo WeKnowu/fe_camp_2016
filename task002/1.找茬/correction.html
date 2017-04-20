@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>找茬</title>
+</head>
+<body>
+	<article>
+		<h3>选择任意一个线上页面（各大公司均可），指出 HTML 代码中的不合理之处。</h3>
+		<p><a href="http://www.hust.edu.cn/" target="_blank">进入网站：华中科技大学</a></p>
+		<p>1.一个img标签必须具有一个alt属性，除了一定的条件下</p>
+		<pre>如源代码<code>line 467:&ltimg src="/_upload/article/images/ff/29/ce685acd417bab7854d755e7d04f/fe0c2f24-5bbd-457a-945c-fa11c13b2e4d.jpg" class="imgs"/></code>没有用alt="多模态跨尺度生物医学成像设施大楼建设启动"</pre>
+		<p>2.重复的ID</p>
+		<pre><code>line 387:&ltdiv class="wrapper news0" id="container"></code>和<code>line 511:&ltdiv class="wrapper news2" id="container"></code> 重复用id="container"</pre>
+	</article>
+</body>
+</html>
