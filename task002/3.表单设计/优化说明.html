@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>优化说明</title>
+</head>
+<body>
+	<p>原始表单网页：<a href="http://bbs.whnet.edu.cn/main.html?reg" target="_blank">白云黄鹤BBS站</a></p>
+	<p>优化后的表单：<a href="优化表单.html" target="_blank">注册用户</a></p>
+	<p>
+		<ul>优化代码修改处如下：
+			<li>出生年月输入框改为type="date"类型：<code>&ltinput type="date"></code></li>
+			<li>学校院系班级或工作单位一栏改用select标签：<code>&ltselect name="dept2">&ltoption value="1">本科&lt/option>&ltoption value="2">硕士&lt/option>&ltoption value="3">博士&lt/option>&lt/select>&ltselect name="dept">&ltoption value="1">电子信息与通信学院&lt/option>&ltoption value="2">机械科学与工程学院&lt/option>&ltoption value="3">生命科学学院&lt/option>&lt/select></code></li>
+			<li>为input标签添加minlength和maxlength属性</li>
+			<li>为第一个input标签添加autofocus属性</li>
+			<li>为每个input标签添加accesskey属性，可使用alt+（数字键）访问每个输入框，如alt+2可编辑第2个输入框</li>
+			<li>为每个input标签添加tabindex属性，可用tab键依次编辑各个输入框</li>
+		</ul>
+	</p>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>武汉白云黄鹤站</title>
+</head>
+<body>
+	<center style="margin-top:10px;">武汉白云黄鹤站 -- 新用户注册<hr style="margin:2px;padding:0;" color="green">
+		<form method="post" action="bbsdonewreg?mode=1" style="padding:0;margin:0;">
+			<table width="640" style="padding:0;margin:2px;">
+				<tbody><tr><td colspan="2" style="margin:0;padding:5px 0 0 0;"><font class="c31" style="font-weight: bold;">欢迎加入本站， 注册前请仔细阅读如下 帮助：</font><ul style="margin-top:10px;margin-botton:0px;"><li>请详细、准确的填写本人资料，帐号注册成功后将获得本站基本权限（阅读文章、接收私人信件、接收他人消息、环顾四方、进入聊天室）。<font class="c32">无发表文章（post）权限 </font>。 </li><li>同时系统会自动对您的资料进行审核，审核通过后即可<font class="c32">拥有本站普通用户的全部权限（包括发表文章）</font>。<br>如果自动审核失败，请您登录后在左侧边栏“个人工具箱”里面选择“填注册单”，之后我们会对您的注册进行人工验证。</li><li><span style="color:red;">站务组提醒</span>：<ul style="margin-top:0;margin-botton:0;list-style-type: square;"><li>请不要选择不雅帐号或昵称，否则将不会被通过注册；通过注册的也有可能随时被删除</li><li>为了合理利用本站的帐号资源，请不要大量注册本站帐号。</li><li>如果一次连续注册帐号数量超过3个，您的ip将被禁止登录6个月。</li></ul></li><li>如有任何困难请到 <a href="bbsdoc?board=BBSHelp">BBSHELP</a> 阅读置顶文章，仍无法解决请发邮件到<a href="mailto:bbs@hust.edu.cn">bbs@hust.edu.cn</a>询问或访问:<a href="http://weibo.com/whnetbbs" target="_blank"><img src="http://weibo.com/favicon.ico" width="16" height="16" border="0">白云黄鹤BBS官方微博</a></li></ul></td></tr>
+					<tr><td align="right">请输入用户名:</td><td align="left"><input id="userid" name="userid" size="12" minlength="2" maxlength="12" onblur="checkid()" autofocus accesskey="1" tabindex="1"> *(2-12字符, 必须全为英文字母) <span id="resultSpan" style="color:red;"></span></td></tr><tr><td align="right">请输入密码:</td><td align="left"><input type="password" name="pass1" size="12" minlength="4" maxlength="12" accesskey="2" tabindex="2"> *(4-12字符)
+				</td></tr><tr><td align="right">请确认密码:</td><td align="left"><input type="password" name="pass2" size="12" maxlength="12" accesskey="3" tabindex="3"> *
+			</td></tr><tr><td align="right">请输入昵称:</td><td align="left"><input name="username" size="20" minlength="2" maxlength="32" accesskey="4" tabindex="4"> *(2-30字符, 中英文不限)
+		</td></tr><tr><td align="right">请输入您的真实姓名:</td><td align="left"><input name="realname" size="20" accesskey="5" tabindex="5"> *(请用中文, 至少2个汉字)
+	</td></tr><tr><td align="right">学校院系班级或工作单位:</td><td align="left"><select name="dept1" accesskey="6" tabindex="6"><option value="1">本科</option><option value="2">硕士</option><option value="3">博士</option></select><select name="dept2" accesskey="7" tabindex="7"><option value="1">电子信息与通信学院</option><option value="2">机械科学与工程学院</option><option value="3">生命科学学院</option></select> *
+	<br>
+</td></tr><tr><td align="right">您的联络电话:</td><td align="left"><input name="phone" size="40" accesskey="8" tabindex="8"> *(请注可联系时间)
+</td></tr><tr><td align="right">详细居住地址:</td><td align="left"><input name="address" size="40" minlength="6" accesskey="9" tabindex="9"> *(至少6个字符，请详细到寝室号码)
+</td></tr><tr><td align="right">您的出生年月:
+</td><td align="left"><input type="date" name="date" accesskey="0" tabindex="10"> *<br></td></tr><tr><td align="right">请输入您的性别: </td><td align="left"><input type="radio" name="gender" value="0" checked="" tabindex="11">男 <input type="radio" name="gender" value="1" tabindex="12">女<br>
+<input type="hidden" name="xz" value="0" checked="" tabindex="13">
+</td></tr><tr><td align="right">您的E-mail地址:</td><td align="left"><input name="email" size="40" accesskey="j" tabindex="14"> *
+</td></tr><tr><td align="right">学号(教职工请填写教工号，新生请填写考生号):</td><td align="left"><input id="studentno" name="studentno" size="20" maxlength="18" accesskey="k" tabindex="15"> *
+</td></tr><tr><td align="right">身份证号后五位:</td><td align="left"><input id="identification" name="identification" size="20" maxlength="5" accesskey="l" tabindex="16"> *
+</td></tr><tr><td align="right">上站留言(可选):</td><td align="left"><textarea name="words" rows="3" cols="40" wrap="physicle" accesskey="i" tabindex="17"></textarea>
+</td></tr></tbody></table><hr style="margin:2px;padding:0;" color="red">
+<input type="submit" onclick="return confirmreg()" value="提交表格"> <input type="reset" value="重新填写"> <input type="button" value="注册帮助" onclick="window.location='/help_reg.html'">
+</form>
+</center>
+</body>
+</html>
