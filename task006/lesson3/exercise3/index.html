@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>练习3</title>
+</head>
+<body>
+	<p>运营的同学策划一个活动，2018年2月的每个星期三 10 点整都做促销秒杀，从现在开始倒计时。（原题为2017年，改为2018年）</p>
+	<p>要求实现一个函数，返回一个数组，内容是2018年2月的每个星期三是2月几号、它们距离今天还有几天。</p>
+	<p>打开console查看</p>
+	<div id="date"></div>
+
+	<script type="text/javascript">
+	function printDate(){
+	  var myDate = new Date();
+	  //var myDate = Date().split(" ");
+	  var arr = new Array();
+	  var obj = {date:"",daybefore:""};
+	  var actDate = new Date();
+	  actDate.setFullYear(2018,1);
+	  for(var i=0; i<28; i++){
+	    actDate.setDate(i+1);
+	    if(actDate.getDay() === 3){
+	      obj.date = actDate.getFullYear() + "/" + (actDate.getMonth()+1) + "/" + actDate.getDate();
+	      obj.daybefore = (actDate.getTime() - myDate.getTime())/(3600000*24);
+	      arr.push(obj);
+	      console.log(obj);
+	    }
+	  }
+	  return arr;
+	}
+	window.onload = printDate();
+	</script>
+</body>
+</html>
