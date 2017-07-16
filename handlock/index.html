@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Handlock Demo</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<main>
+		<h2>手势解锁</h2>
+		<div id="description">验证密码，请绘制密码图案</div>
+		<div id="handlock">
+			<canvas></canvas>
+			<canvas></canvas>
+			<canvas></canvas>
+		</div>
+		<div id="tip">请连接至少4个点</div>
+		<div id="select">
+			<label for=""><input type="radio" id="checkMode" name="mode" value="check">验证密码</label>
+			<label for=""><input type="radio" id="setMode" name="mode" value="set">设置密码</label>
+		</div>
+	</main>
+	<script type="text/javascript" src="handlock.js"></script>
+</body>
+</html>
