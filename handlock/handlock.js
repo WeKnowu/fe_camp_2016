@@ -29,9 +29,9 @@ function drawCircle(canvas, x, y, radius, startAngle, endAngle, anticlockwise, c
 function drawLine(canvas, xFrom, yFrom, xTo, yTo, color) {
 	var ctx = canvas.getContext("2d");
 	ctx.beginPath();
+	ctx.strokeStyle = color;
 	ctx.lineTo(xFrom, yFrom);
 	ctx.moveTo(xTo, yTo);
-	ctx.strokeStyle = color;
 	ctx.stroke();
 	ctx.closePath();
 	return ctx;
@@ -69,7 +69,7 @@ function getLocation(canvas, x, y) {
  * @return the distance.
  */
 function getDistance(x1, y1, x2, y2) {
-	return Math.sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2);
+	return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
 }
 /**
  * whichCircle is a function that find which circle the mouse is near.
@@ -93,25 +93,34 @@ function clearCanvas(c) {
 	var ctx = c.getContext("2d");
 	ctx.clearRect(0, 0, c.width, c.height);
 }
-/*set the width of canvas*/
+/**
+ * beforeClock is a functio that draw 9 small circles.
+ * @param  c The canvas.
+ */
+function beforeClock(c) {
+	for (var i = 0; i < 3; i++) {
+		for (var j = 0; j < 3; j++) {
+			drawCircle(c, w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "#969696", 1);
+		}
+	}
+}
+/* set the width of canvas */
 var canvas = document.getElementsByTagName("canvas");
 var handlock = document.getElementById("handlock");
 for (var i = 0; i < canvas.length; i++) {
 	canvas[i].setAttribute("width", handlock.offsetWidth);
 	canvas[i].setAttribute("height", handlock.offsetWidth);
 }
-/*draw the first canvas*/
+/* draw the canvas in the beginning */
 var w = canvas[0].getAttribute("width");
 var h = canvas[0].getAttribute("height");
-for (var i = 0; i < 3; i++) {
-	for (var j = 0; j < 3; j++) {
-		drawCircle(canvas[1], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "#969696", 1);
-	}
-}
-/*draw the second canvas*/
+beforeClock(canvas[2]);
+/* draw the canvas while mousedown */
 var clicked = new Array(9); //clicked数组元素表示9个点是否已被连接
 clicked.fill(false);
 var flag = false; //flag为false，表示未开始进行连接；flag为true，表示已开始连接点
+var startPoint = [0, 0];
+var endPoint = [0, 0];
 canvas[2].addEventListener("mousedown", function(e) {
 	var location = getLocation(canvas[2], e.clientX, e.clientY);
 	var i = whichCircle(location.x, w);
@@ -122,11 +131,41 @@ canvas[2].addEventListener("mousedown", function(e) {
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "red", true);
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "red", false);
 			clicked[i * 3 + j] = true;
+			startPoint = [w * (i + 1) / 4, h * (j + 1) / 4];
+		}
+	}
+	flag = true;
+});
+/* draw the canvas while mousemove */
+canvas[2].addEventListener("mousemove", function(e) {
+	if (flag) {
+		var location = getLocation(canvas[2], e.clientX, e.clientY);
+		var i = whichCircle(location.x, w);
+		var j = whichCircle(location.y, h);
+		if (!clicked[i * 3 + j]) {
+			var distance = getDistance(location.x, location.y, w * (i + 1) / 4, h * (j + 1) / 4);
+			if (distance < 30) {
+				drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "red", true);
+				drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "red", false);
+				clicked[i * 3 + j] = true;
+				endPoint = [w * (i + 1) / 4, h * (j + 1) / 4];
+				drawLine(canvas[1], startPoint[0], startPoint[1], endPoint[0], endPoint[1], "red");
+				startPoint = endPoint;
+			}
+		} else {
+			clearCanvas(canvas[0]);
+			drawLine(canvas[0], startPoint[0], startPoint[1], location.x, location.y, "red");
 		}
 	}
 });
+/* clear the canvas while mouseup */
 canvas[2].addEventListener("mouseup", function() {
 	clearCanvas(canvas[0]);
+	clearCanvas(canvas[1]);
 	clearCanvas(canvas[2]);
+	beforeClock(canvas[2]);
 	clicked.fill(false);
+	flag = false;
+	startPoint = [0, 0];
+	endPoint = [0, 0];
 });
