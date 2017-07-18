@@ -1,3 +1,4 @@
+const touchRadius = 40;
 /**
  * @description drawCircle is a function that, given some parameters, return a circle or an arc.
  * @param  canvas Where to draw.
@@ -115,19 +116,24 @@ for (var i = 0; i < canvas.length; i++) {
 var w = canvas[0].getAttribute("width");
 var h = canvas[0].getAttribute("height");
 beforeClock(canvas[2]);
-/* draw the canvas while mousedown */
+/* draw the canvas while touchstart */
 var clicked = new Array(9); //clicked数组元素表示9个点是否已被连接
 clicked.fill(false);
 var flag = false; //flag为false，表示未开始进行连接；flag为true，表示已开始连接点
 var startPoint = [0, 0];
 var endPoint = [0, 0];
-canvas[2].addEventListener("mousedown", function(e) {
-	var location = getLocation(canvas[2], e.clientX, e.clientY);
+canvas[2].addEventListener("touchstart", function(e) {
+	var {
+		clientX,
+		clientY
+	} = e.changedTouches[0];
+	var location = getLocation(canvas[2], clientX, clientY);
 	var i = whichCircle(location.x, w);
 	var j = whichCircle(location.y, h);
+
 	if (!clicked[i * 3 + j]) {
 		var distance = getDistance(location.x, location.y, w * (i + 1) / 4, h * (j + 1) / 4);
-		if (distance < 30) {
+		if (distance < touchRadius) {
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "#fff", true);
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "red", true);
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "red", false);
@@ -137,31 +143,38 @@ canvas[2].addEventListener("mousedown", function(e) {
 		}
 	}
 });
-/* draw the canvas while mousemove */
-canvas[2].addEventListener("mousemove", function(e) {
-	if (flag) {
-		var location = getLocation(canvas[2], e.clientX, e.clientY);
-		var i = whichCircle(location.x, w);
-		var j = whichCircle(location.y, h);
-		if (!clicked[i * 3 + j]) {
-			var distance = getDistance(location.x, location.y, w * (i + 1) / 4, h * (j + 1) / 4);
-			if (distance < 30) {
-				drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "#fff", true);
-				drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "red", true);
-				drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "red", false);
-				clicked[i * 3 + j] = true;
-				endPoint = [w * (i + 1) / 4, h * (j + 1) / 4];
+/* draw the canvas while touchmove */
+canvas[2].addEventListener("touchmove", function(e) {
+	var {
+		clientX,
+		clientY
+	} = e.changedTouches[0];
+	var location = getLocation(canvas[2], clientX, clientY);
+	var i = whichCircle(location.x, w);
+	var j = whichCircle(location.y, h);
+	if (!clicked[i * 3 + j]) {
+		var distance = getDistance(location.x, location.y, w * (i + 1) / 4, h * (j + 1) / 4);
+		if (distance < touchRadius) {
+			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "#fff", true);
+			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "red", true);
+			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "red", false);
+			clicked[i * 3 + j] = true;
+			endPoint = [w * (i + 1) / 4, h * (j + 1) / 4];
+			if (flag) {
 				clearCanvas(canvas[1]);
 				drawLine(canvas[0], startPoint[0], startPoint[1], endPoint[0], endPoint[1], "red");
-				startPoint = endPoint;
 			}
+			startPoint = endPoint;
+			flag = true;
 		}
+	}
+	if (flag) {
 		clearCanvas(canvas[1]);
 		drawLine(canvas[1], startPoint[0], startPoint[1], location.x, location.y, "red");
 	}
 });
-/* clear the canvas while mouseup */
-document.addEventListener("mouseup", function() {
+/* clear the canvas while touchend */
+document.addEventListener("touchend", function() {
 	clearCanvas(canvas[0]);
 	clearCanvas(canvas[1]);
 	clearCanvas(canvas[2]);
