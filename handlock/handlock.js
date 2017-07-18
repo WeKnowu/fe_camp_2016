@@ -30,8 +30,8 @@ function drawLine(canvas, xFrom, yFrom, xTo, yTo, color) {
 	var ctx = canvas.getContext("2d");
 	ctx.beginPath();
 	ctx.strokeStyle = color;
-	ctx.lineTo(xFrom, yFrom);
-	ctx.moveTo(xTo, yTo);
+	ctx.moveTo(xFrom, yFrom);
+	ctx.lineTo(xTo, yTo);
 	ctx.stroke();
 	ctx.closePath();
 	return ctx;
@@ -128,13 +128,14 @@ canvas[2].addEventListener("mousedown", function(e) {
 	if (!clicked[i * 3 + j]) {
 		var distance = getDistance(location.x, location.y, w * (i + 1) / 4, h * (j + 1) / 4);
 		if (distance < 30) {
+			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "#fff", true);
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "red", true);
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "red", false);
 			clicked[i * 3 + j] = true;
+			flag = true;
 			startPoint = [w * (i + 1) / 4, h * (j + 1) / 4];
 		}
 	}
-	flag = true;
 });
 /* draw the canvas while mousemove */
 canvas[2].addEventListener("mousemove", function(e) {
@@ -145,21 +146,22 @@ canvas[2].addEventListener("mousemove", function(e) {
 		if (!clicked[i * 3 + j]) {
 			var distance = getDistance(location.x, location.y, w * (i + 1) / 4, h * (j + 1) / 4);
 			if (distance < 30) {
+				drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "#fff", true);
 				drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "red", true);
 				drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "red", false);
 				clicked[i * 3 + j] = true;
 				endPoint = [w * (i + 1) / 4, h * (j + 1) / 4];
-				drawLine(canvas[1], startPoint[0], startPoint[1], endPoint[0], endPoint[1], "red");
+				clearCanvas(canvas[1]);
+				drawLine(canvas[0], startPoint[0], startPoint[1], endPoint[0], endPoint[1], "red");
 				startPoint = endPoint;
 			}
-		} else {
-			clearCanvas(canvas[0]);
-			drawLine(canvas[0], startPoint[0], startPoint[1], location.x, location.y, "red");
 		}
+		clearCanvas(canvas[1]);
+		drawLine(canvas[1], startPoint[0], startPoint[1], location.x, location.y, "red");
 	}
 });
 /* clear the canvas while mouseup */
-canvas[2].addEventListener("mouseup", function() {
+document.addEventListener("mouseup", function() {
 	clearCanvas(canvas[0]);
 	clearCanvas(canvas[1]);
 	clearCanvas(canvas[2]);
