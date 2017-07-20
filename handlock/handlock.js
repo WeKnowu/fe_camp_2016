@@ -1,4 +1,5 @@
 const touchRadius = 40;
+const defaultPassword = "0124678";
 /**
  * @description drawCircle is a function that, given some parameters, return a circle or an arc.
  * @param  canvas Where to draw.
@@ -105,24 +106,11 @@ function beforeClock(c) {
 		}
 	}
 }
-/* set the width of canvas */
-var canvas = document.getElementsByTagName("canvas");
-var handlock = document.getElementById("handlock");
-for (var i = 0; i < canvas.length; i++) {
-	canvas[i].setAttribute("width", handlock.offsetWidth);
-	canvas[i].setAttribute("height", handlock.offsetWidth);
-}
-/* draw the canvas in the beginning */
-var w = canvas[0].getAttribute("width");
-var h = canvas[0].getAttribute("height");
-beforeClock(canvas[2]);
-/* draw the canvas while touchstart */
-var clicked = new Array(9); //clicked数组元素表示9个点是否已被连接
-clicked.fill(false);
-var flag = false; //flag为false，表示未开始进行连接；flag为true，表示已开始连接点
-var startPoint = [0, 0];
-var endPoint = [0, 0];
-canvas[2].addEventListener("touchstart", function(e) {
+/**
+ * draw the canvas while touchstart
+ * @param e event
+ */
+function touchstartHandle(e) {
 	var {
 		clientX,
 		clientY
@@ -131,20 +119,24 @@ canvas[2].addEventListener("touchstart", function(e) {
 	var i = whichCircle(location.x, w);
 	var j = whichCircle(location.y, h);
 
-	if (!clicked[i * 3 + j]) {
+	if (!clicked[j * 3 + i]) {
 		var distance = getDistance(location.x, location.y, w * (i + 1) / 4, h * (j + 1) / 4);
 		if (distance < touchRadius) {
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "#fff", true);
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "red", true);
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "red", false);
-			clicked[i * 3 + j] = true;
+			clicked[j * 3 + i] = true;
+			touchPoint.push(j * 3 + i);
 			flag = true;
 			startPoint = [w * (i + 1) / 4, h * (j + 1) / 4];
 		}
 	}
-});
-/* draw the canvas while touchmove */
-canvas[2].addEventListener("touchmove", function(e) {
+}
+/**
+ * draw the canvas while touchmove
+ * @param e event
+ */
+function touchmoveHandle(e) {
 	var {
 		clientX,
 		clientY
@@ -152,13 +144,14 @@ canvas[2].addEventListener("touchmove", function(e) {
 	var location = getLocation(canvas[2], clientX, clientY);
 	var i = whichCircle(location.x, w);
 	var j = whichCircle(location.y, h);
-	if (!clicked[i * 3 + j]) {
+	if (!clicked[j * 3 + i]) {
 		var distance = getDistance(location.x, location.y, w * (i + 1) / 4, h * (j + 1) / 4);
 		if (distance < touchRadius) {
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "#fff", true);
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 10, 0, 2 * Math.PI, false, "red", true);
 			drawCircle(canvas[2], w * (i + 1) / 4, h * (j + 1) / 4, 30, 0, 2 * Math.PI, false, "red", false);
-			clicked[i * 3 + j] = true;
+			clicked[j * 3 + i] = true;
+			touchPoint.push(j * 3 + i);
 			endPoint = [w * (i + 1) / 4, h * (j + 1) / 4];
 			if (flag) {
 				clearCanvas(canvas[1]);
@@ -172,9 +165,11 @@ canvas[2].addEventListener("touchmove", function(e) {
 		clearCanvas(canvas[1]);
 		drawLine(canvas[1], startPoint[0], startPoint[1], location.x, location.y, "red");
 	}
-});
-/* clear the canvas while touchend */
-document.addEventListener("touchend", function() {
+}
+/**
+ * @decription clearPath is a function that clear the path which has been drew.
+ */
+function clearPath() {
 	clearCanvas(canvas[0]);
 	clearCanvas(canvas[1]);
 	clearCanvas(canvas[2]);
@@ -183,4 +178,99 @@ document.addEventListener("touchend", function() {
 	flag = false;
 	startPoint = [0, 0];
 	endPoint = [0, 0];
+}
+/**
+ * draw the canvas while touchend
+ */
+function touchendHandle() {
+	if (flag) {
+		if (touchPoint.length < 4) {
+			tip.className = "show";
+			setTimeout(function() {
+				tip.className = "hide";
+			}, 1000);
+		} else if (value === "check") {
+			record = touchPoint.join("");
+			locker.check();
+		} else if (value === "update") {
+			if (record.length) {
+				repeat = touchPoint.join("");
+			} else {
+				record = touchPoint.join("");
+			}
+			locker.update();
+		}
+		touchPoint.splice(0, touchPoint.length);
+		clearPath();
+	}
+}
+/* set the width of canvas */
+var canvas = document.getElementsByTagName("canvas");
+var handlock = document.getElementById("handlock");
+for (var i = 0; i < canvas.length; i++) {
+	canvas[i].setAttribute("width", handlock.offsetWidth);
+	canvas[i].setAttribute("height", handlock.offsetWidth);
+}
+/* draw the canvas in the beginning */
+var w = canvas[0].getAttribute("width");
+var h = canvas[0].getAttribute("height");
+beforeClock(canvas[2]);
+
+var clicked = new Array(9); //clicked数组元素表示9个点是否已被连接
+clicked.fill(false);
+var flag = false; //flag为false，表示未开始进行连接；flag为true，表示已开始连接点
+var startPoint = [0, 0];
+var endPoint = [0, 0];
+var touchPoint = []; //连接点编号数组
+var record = ""; //记录重复前图案的字符串
+var repeat = ""; //记录重复后图案的字符串
+var password = localStorage.getItem("handlock_password") || defaultPassword;
+var selectMode = document.querySelector("#select");
+var hint = document.querySelector("#description");
+var tip = document.querySelector("#tip");
+var value = "check";
+var locker = {
+	check: function() {
+		password = localStorage.getItem("handlock_password") || defaultPassword;
+		if (record === password) {
+			hint.innerHTML = "密码正确！";
+		} else {
+			hint.innerHTML = "密码错误，请重新绘制！";
+		}
+		record = "";
+	},
+	update: function() {
+		if (repeat.length) {
+			if (record === repeat) {
+				localStorage.setItem("handlock_password", record);
+				record = "";
+				repeat = "";
+				document.querySelector("#checkMode").checked = true;
+				value = "check";
+				hint.innerHTML = "验证密码，请绘制密码图案";
+			} else {
+				record = "";
+				repeat = "";
+				hint.innerHTML = "两次的图形绘制不一致";
+			}
+		} else {
+			hint.innerHTML = "请再次绘制相同图案";
+		}
+	}
+}
+canvas[2].addEventListener("touchstart", touchstartHandle);
+canvas[2].addEventListener("touchmove", touchmoveHandle);
+document.addEventListener("touchend", touchendHandle);
+selectMode.addEventListener("change", function(e) {
+	value = e.target.value;
+	if (value === "update") {
+		clearPath();
+		hint.innerHTML = "设置密码，请绘制密码图案";
+
+	} else if (value === "check") {
+		clearPath();
+		record = "";
+		repeat = "";
+		hint.innerHTML = "验证密码，请绘制密码图案";
+	}
 });
