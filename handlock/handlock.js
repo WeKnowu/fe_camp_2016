@@ -39,21 +39,6 @@ function drawLine(canvas, xFrom, yFrom, xTo, yTo, color) {
 	return ctx;
 }
 /**
- * @description Add a function which will be executing when the window is onload.
- * @param func The function that is to add.
- */
-function addLoadEvent(func) {
-	var oldonload = window.onload;
-	if (typeof window.onload != "function") {
-		window.onload = func;
-	} else {
-		window.onload = function() {
-			oldonload;
-			func();
-		}
-	}
-}
-/**
  * @description getLocation is a function that get X-coordinate and Y-coordinate on canvas.
  * @param  canvas The rectangular coordinate system.
  * @param x, y The coordinates in the window.
