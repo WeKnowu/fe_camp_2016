@@ -46,9 +46,11 @@ canvas{
 	z-index: 9999;
 }
 #tip.hide{
+	opacity: 0;
 	visibility: hidden;
 	transition: all 1s;
 }
 #tip.show{
+	opacity: 1;
 	visibility: visible;
 }
