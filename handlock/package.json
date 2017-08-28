@@ -1,0 +1,16 @@
+{
+  "name": "handlock",
+  "version": "1.0.0",
+  "description": "a demo of handlock",
+  "main": "index.js",
+  "dependencies": {
+    "webpack": "^3.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
