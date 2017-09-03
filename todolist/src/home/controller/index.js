@@ -51,4 +51,17 @@ export default class extends Base {
     }
     this.success();
   }
+  async clearAction(){
+    let todoList = this.model('todo');
+    let doneList = this.model('done');
+    let result1 = await todoList.where().delete();
+    let result2 = await doneList.where().delete();
+        if(!result1){
+      this.fail(1000, 'clear todolist failed!');
+    }
+    if(!result2){
+      this.fail(1000, 'clear donelist failed!');
+    }
+    this.success();
+  }
 }

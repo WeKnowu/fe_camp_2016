@@ -78,3 +78,17 @@ function remove(id, value) {
 		}
 	});
 }
+
+function clear(){
+	$.ajax({
+		url: '/home/index/clear',
+		type: 'POST',
+		dateType: 'json',
+		successs: res => {
+			if (!res.errno) {
+				window.location.reload();
+			} else alert(res.errmsg);
+		}
+	});
+	window.location.reload();
+}
