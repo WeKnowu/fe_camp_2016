@@ -20,46 +20,64 @@ export default class extends Base {
     }
     let todo_data = await todo_model.where().select();
     let done_data = await done_model.where().select();
-    this.assign('todoList',todo_data);
-    this.assign('doneList',done_data);
+    this.assign('todoList', todo_data);
+    this.assign('doneList', done_data);
     this.assign('tcount', todo_data.length);
     this.assign('dcount', done_data.length);
     return this.display();
   }
-  async updateAction(){
+  async updateAction() {
     let info = this.post();
     let delList = this.model(info.from);
     let addList = this.model(info.to);
-    let updateData = await delList.where({id:info.id}).find();
-    console.log(updateData.id);
-    let result1 = await delList.where({id:info.id}).delete();
+    let updateData = await delList.where({
+      id: info.id
+    }).find();
+    let result1 = await delList.where({
+      id: info.id
+    }).delete();
     let result2 = await addList.add(updateData);
-    if(!result1){
+    if (!result1) {
       this.fail(1000, 'update failed!');
     }
-    if(!result2){
+    if (!result2) {
       this.fail(1000, 'update failed!');
     }
     this.success();
   }
-  async removeAction(){
+  async editAction() {
     let info = this.post();
     let list = this.model(info.list);
-    let result = await list.where({id:info.id}).delete();
-    if(!result){
+    let result = await list.where({
+      id: info.id
+    }).update({
+      task: info.title
+    });
+    if (!result) {
+      this.failt(1000, 'edit failed!');
+    }
+    this.success();
+  }
+  async removeAction() {
+    let info = this.post();
+    let list = this.model(info.list);
+    let result = await list.where({
+      id: info.id
+    }).delete();
+    if (!result) {
       this.fail(1000, 'remove failed');
     }
     this.success();
   }
-  async clearAction(){
+  async clearAction() {
     let todoList = this.model('todo');
     let doneList = this.model('done');
     let result1 = await todoList.where().delete();
     let result2 = await doneList.where().delete();
-        if(!result1){
+    if (!result1) {
       this.fail(1000, 'clear todolist failed!');
     }
-    if(!result2){
+    if (!result2) {
       this.fail(1000, 'clear donelist failed!');
     }
     this.success();
